@@ -1,25 +1,30 @@
-import logo from './logo.svg';
+import React, { Component } from 'react';
+import Navbar from './component/Navbar';
 import './App.css';
+// import Useritem from './component/Useritem';
+import Users from'./component/Users';
+import axios from 'axios';
+export class App extends Component {
+   state={
+     users:[],
+     loading:false
+   };
+  async componentDidMount(){
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    this.setState({loading:true});
+  const res=await axios.get('https://api.github.com/users');
+  this.setState({ users:res.data,loading:false});
+}
+  render() {
+    return (
+    <div>  
+    <Navbar title="Github finder" icon="fab fa-github"></Navbar>
+    <div className ="container">
+     <Users loading={this.state.loading} users={this.state.users}></Users>
     </div>
-  );
+   </div>
+    )
+  }
 }
 
-export default App;
+export default App
